@@ -19,7 +19,7 @@ def download_video(url, output_dir='./videos/'):
     command = [
         'yt-dlp',
         '--quiet',
-        '-f', 'mp4',
+        '-f', '136+140',
         '-o', f'{output_dir}%(title)s.%(ext)s',
         url
     ]
