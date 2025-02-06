@@ -1,11 +1,19 @@
 import subprocess
 from concurrent.futures import ThreadPoolExecutor
 import threading
+import re
 import sys
 
 # Cria um Lock para sincronizar a impressão
 print_lock = threading.Lock()
 
+
+def is_valid_youtube_url(url):
+    # Regex para validar URLs do YouTube no formato https://www.youtube.com/watch?v=ID_DO_VIDEO
+    regex = re.compile(
+        r'^https?://(?:www\.)?youtube\.com/watch\?v=[\w-]{11}(?:&.*)?$'
+    )
+    return re.match(regex, url) is not None
 
 
 def download_video_rotine( url, output_dir='./videos/' ) :
@@ -54,6 +62,10 @@ try:
     while True:
         line = input()  # Lê uma linha de entrada
         if line:
+            if not is_valid_youtube_url( line ):
+                
+                print('❌ URL inválida') 
+                continue
             threading.Thread( target=download_video, args=(line, output_dir) ).start()
 except KeyboardInterrupt:
     print("\nOperação cancelada pelo usuário.")
